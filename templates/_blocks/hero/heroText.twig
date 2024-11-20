@@ -1,0 +1,60 @@
+<section aria-label="Hero" class="relative flex overflow-hidden px-4">
+    {# Container for the entire hero section #}
+    <div class="relative w-full">
+        {# Image with fixed padding #}
+        {% if block.image|length %}
+        <div class="relative w-full h-auto p-4">
+            {# Image #}
+            <div class="relative w-full h-auto">
+                {% include '_components/picture' with {
+                    image: block.image.one(),
+                    transform: 'noRatio',
+                    ratio: false,
+                    focalPoint: true,
+                    imgClass: 'object-cover w-full h-auto rounded-xl'
+                } %}
+            </div>
+
+            {# Overlay Content (Heading and Button) #}
+            <div class="absolute inset-0 flex flex-col justify-center items-start text-white text-left px-6 md:py-4" style="margin-left:120px;">
+                {# Eyebrow Text #}
+                {% if block.eyebrow|length %}
+                <div class="mb-4 text-lg sm:text-xl lg:text-2xl font-medium">
+                    {{ block.eyebrow }}
+                </div>
+                {% endif %}
+
+                {# Heading #}
+                {% if block.heading|length %}
+                {% include '_components/heading' with {
+                    tag: 'h1',
+                    size: 'font-bold text-4xl sm:text-4xl md:text-5xl lg:text-7xl',
+                    text: block.heading,
+                } %}
+                {% endif %}
+
+                {# Text (Dynamic) #}
+                {% if block.text|length %}
+                {% include '_components/richText' with {
+                    tag: 'h2',
+                    content: '<p>' ~ block.text ~ '</p>',
+                    class: 'max-w-[500px] pt-2'
+                } %}
+                {% endif %}
+
+                {# CTA Faces/Button #}
+                <div class="pt-6">
+                    <div class="md:col-span-1">
+                        {% include '_components/ctaFaces' with {
+                            style: 'regular',
+                            text: block.ctaText|length ? block.ctaText : null,
+                            button: block.ctaButton|length ? block.ctaButton : null,
+                            theme: block.theme|length ? block.theme : null
+                        } %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>

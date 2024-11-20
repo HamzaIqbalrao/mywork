@@ -1,0 +1,36 @@
+{#
+    Heading Component
+
+    @type {include}
+    @param {string} text - required
+    @param {string} tag
+    @param {string} size
+    @param {string} class
+
+    @example
+    {% include '_components/heading' with {
+        text: 'Heading',
+        tag: 'h2',
+        size: 'text-xl',
+        class: 'text-white'
+    } %}
+#}
+
+{% set highlightStyles = [ 
+    ['attr', 'u', { class: 'no-underline text-white' }], 
+] %}
+
+{# Set heading defaults #}
+{% set tag = tag ?? 'h2' %}
+{% set size = size ?? 'text-xl' %}  {# Default to text-xl if no size is provided #}
+
+{# Apply highlight styles to heading text #}
+{% set modifiedHeading = text|retcon(highlightStyles) %}
+
+{# Strip tags from heading text #}
+{% set strippedHeadingText = modifiedHeading|replace({'<p>': '', '</p>': ''}) %}
+
+<{{ tag }} class="text-white {{ size }} {{ class ?? '' }}"  {{ attributes is defined ? attributes|raw }}>
+    {{ strippedHeadingText|raw|nl2br }}
+</{{ tag }}>
+

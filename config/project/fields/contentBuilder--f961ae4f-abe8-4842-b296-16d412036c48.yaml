@@ -1,0 +1,36 @@
+columnSuffix: null
+handle: contentBuilder
+instructions: null
+name: 'Content Builder'
+searchable: false
+settings:
+  createButtonLabel: null
+  entryTypes:
+    - 0cb5f968-0499-4ffe-9f81-0804be95a62e # Fleet Grid
+    - 7a3a53b0-aefc-4c7f-a3fc-b890fe021391 # Fleet Slider
+    - 291b8794-da4b-44d3-b993-50203f9590b6 # Gallery
+    - 221a3e88-bf37-4ec3-8b78-bb2262608fd5 # Heading + Text
+    - f00435c2-516d-4d32-bb6e-a525ffcc9019 # Image Slider
+    - 64700cdf-f2e4-4360-a2b6-a7433e0da135 # Scrolling Text
+    - 31f99b09-7d43-4a28-8bb0-bf33ff1ecc56 # Service Grid
+    - d489f8dd-57fc-4afb-8886-2c95fb4a7bfd # Service Selector
+    - accd1fcb-b9ba-4c5e-b586-e40e58daea71 # Staggered Blocks
+    - d671fd86-cab7-4360-b1ec-0a993aaddef8 # Text + FAQ
+    - e95b14f5-b435-4149-b65f-9dafd6231f8a # Text + Icon Cards
+    - 49163c94-0c7c-4a8e-a5e6-3a46e8122ddb # Rating & Reviews Section
+    - 75794816-59b0-4813-b5a5-311173879c8c # USP
+    - 75c306ea-9ac0-4a6d-afff-f7272e345bda # About Section
+    - 00302146-bb35-41e6-9c93-8ee41d18600a # FAQ
+    - f690c21a-3bdd-46f9-b578-059ebc2b8e8d # Rating & Reviews Cards
+    - 7d6c9f84-aee0-4b21-b095-cefc4e59987a # choose Us
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: null
+  propagationKeyFormat: null
+  propagationMethod: all
+  showCardsInGrid: false
+  viewMode: blocks
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix

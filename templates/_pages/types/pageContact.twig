@@ -1,0 +1,83 @@
+{% extends '_layouts/global' %}
+
+{% block site %}
+	{% for block in entry.hero.all() %}
+		{% include '_blocks/hero/' ~ block.type %}
+	{% endfor %}
+	<div class="pt-20 md:pb-16 md:pt-32 bg-black text-white">
+		<div class=" {{ vars.class.siteMargin.x }} ">
+			<div class="grid gap-y-12 md:grid-cols-12 md:gap-x-16 {{ vars.class.gap.x }}">
+				{# Text + Form #}
+				{% if (entry.eyebrow|length) or (entry.heading|length) %}
+				<div class="flex flex-col gap-y-6 md:col-span-6">
+					{% if entry.heading|length %}
+						{% include '_components/heading' with {
+							tag: 'h1',
+							size: 'text-4xl sm:text-4xl md:text-5xl lg:text-7xl',
+							text: entry.heading,
+							class: 'text-white font-semibold text-4xl md:text-5xl lg:text-6xl leading-tight'
+						} %}
+					{% endif %}
+
+					{% if entry.formText|length %}
+						{% include '_components/richText' with {
+							content: entry.formText,
+							class: 'text-gray-400 font-light md:text-lg leading-relaxed pt-4'
+						} only %}
+					{% endif %}
+
+					<div class="flex flex-col gap-y-6 md:grid md:grid-cols-6 md:gap-x-4">
+						{% if entry.contactText|length %}
+							<div class="md:col-span-3">
+								{% include '_components/richText' with {
+									content: entry.contactText,
+									class: 'text-white font-semibold text-2xl md:py-2'
+								} only %}
+							</div>
+						{% endif %}
+
+						<div class="md:col-span-3">
+							
+							{% if entry.contactnumber|length %}
+							<a href="tel:{{ entry.contactnumber }}" class="flex items-center gap-x-3 text-md font-light hover:text-orange-400 transition 
+							relative py-3 border-2 border-transparent rounded-full 
+							hover:bg-gradient-to-r hover:from-[#E9550D] hover:to-[#F8AB00]">
+								<i class="fa-solid fa-phone text-transparent border-4 border-transparent 
+								hover:text-white hover:border-solid hover:border-[#E9550D]" style="padding-right:12px;"></i>
+								<span class="text-transparent hover:text-white">{{ entry.contactnumber }}</span>
+								<span class="absolute inset-0 border-2 border-transparent rounded-full bg-gradient-to-r from-[#E9550D] to-[#F8AB00]"></span>
+							</a>
+							{% endif %}
+						
+							{% if entry.emailAddress|length %}
+								<a href="mailto:{{ entry.emailAddress }}" class="flex items-center gap-x-3 text-md font-light hover:text-orange-400 transition 
+								relative py-3 border-2 border-transparent rounded-full 
+								hover:bg-gradient-to-r hover:from-[#E9550D] hover:to-[#F8AB00]">
+									<i class="fa-solid fa-envelope text-transparent hover:text-white" style="padding-right:12px;"></i>
+									<span class="text-transparent hover:text-white">{{ entry.emailAddress|replace('mailto:', '') }}</span>
+									<span class="absolute inset-0 border-2 border-transparent rounded-full bg-gradient-to-r from-[#E9550D] to-[#F8AB00]"></span>
+								</a>
+							{% endif %}
+						</div>
+						</div>
+					</div>
+				{% endif %}
+
+				{# Form Section #}
+				<div class="md:col-span-6 bg-gray-800 p-8 rounded-lg shadow-md">
+					{% if entry.form|length %}
+						<div class="max-w-lg">
+							{% include '_components/form' with {
+								form: entry.form.one(),
+								style: 'custom-dark'
+							} %}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+	{% for block in entry.contentBuilder.all() %}
+		{% include '_blocks/' ~ block.type %}
+	{% endfor %}
+{% endblock %}

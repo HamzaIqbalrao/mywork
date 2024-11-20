@@ -1,0 +1,172 @@
+{% set slides = global.ratingReviewsCard.all() %}
+{% set slideCount = slides|length %}
+
+{% set starSvg = source('_svg/star.svg') %}
+
+{% embed '_components/section'
+	with {
+		paddingY: block.padding.value,
+		paddingX: 'flush',
+		class: 'overflow-hidden'
+	}
+%}
+	{% block sectionContent %}
+		<div class="bg-gray-1000 py-16 md:py-20 lg:py-36">
+			<div class="text-white {{ vars.class.siteMargin.x }}">
+				{# Heading + Trustpilot #}
+				<div class="flex flex-col items-center justify-center gap-x-5 gap-y-3 pb-6 md:flex-row md:pb-3">
+				
+
+					{# <div class="flex gap-x-1">
+						{% if global.trustpilotRatingText|length %}
+							<span class="font-medium">{{ global.trustpilotRatingText }}</span>
+						{% endif %}
+						{% if global.trustpilotStarText|length %}
+							<span class="font-light">{{ global.trustpilotStarText }}</span>
+						{% endif %}
+					</div> #}
+				</div>
+
+				{% if global.heading|length %}
+					<div class="px-10 pb-6 text-center lg:pb-16">
+						{% include '_components/heading' with {
+							tag: 'h2',
+							size: 'text-4xl sm:text-4xl md:text-5xl lg:text-7xl',
+							text: global.heading
+						} %}
+					</div>
+				{% endif %}
+                {% if global.plainText|length %}
+                    <div class="px-10 pb-6 text-center lg:pb-16">
+                        {% include '_components/heading' with {
+                            tag: 'h2',
+                            size: 'text-4xl sm:text-4xl md:text-5xl lg:text-7xl',
+                            text: global.plainText
+                        } %}
+                    </div>
+                {% endif %}
+
+				{# Slider #}
+				<section x-data="{{ block.type }}" x-init="slider({{ block.id }})">
+					<div class="swiper z-10 !overflow-visible js-slider-{{ block.id }}">
+						<div class="swiper-wrapper">
+							{% for item in slides %}
+								<div class="swiper-slide !h-auto">
+									<div class="flex h-full flex-col">
+										<div class="mt-auto bg-gray-600 p-5 text-lg md:p-7 md:text-xl">
+										{% if item.authorImage|length %}
+											{% include '_components/picture' with {
+											image: item.authorImage.one(),
+											transform: '4x3',
+											ratio: false,
+											imgClass: 'w-full h-full object-cover'
+										} %}
+										{% endif %}
+											{% if item.starRating|length %}
+												<div class="flex gap-x-0.5">
+														<div class="flex h-5 w-5 items-center justify-center bg-mint">
+															{{
+																svg(starSvg)|attr({
+																	class: 'fill-white w-4 h-4',
+																	'aria-hidden': 'true'
+																})
+															}}
+															<span class="font-medium">{{ item.starRating }} -</span>
+														</div>
+												</div>
+											{% endif %}
+
+											<div class="py-7">
+												{% if item.authorName|length %}
+													<span class="font-medium">{{ item.authorName }} -</span>
+												{% endif %}
+												{% if item.authorCountry|length %}
+													<span class="font-light">{{ item.authorCountry }}</span>
+												{% endif %}
+											</div>
+
+											<div class="leading-none">
+												<span class="mb-1.5 block text-base font-normal">{{ item.quoteText }}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+
+					{# Slider Nav + Button #}
+					<div class="mt-8 flex flex-col items-center justify-between gap-y-5 md:mt-12 md:flex-row md:justify-center">
+						{# {% include '_components/buttons/button' with {
+							text: global.trustpilotButton.text,
+							type: 'a',
+							icon: 'star',
+							url: global.trustpilotButton.url,
+							style: 'white-outline-green'
+						} %} #}
+
+						<div class="flex items-center justify-center gap-3 md:absolute md:right-10 xl:right-20 2xl:right-28 {{ slideCount <= 3 ? 'hidden' }}">
+							{% include '_components/buttons/buttonRound' with {
+								type: 'button',
+								icon: 'arrow-left',
+								style: 'white-outline',
+								class: 'slider-button-prev-' ~ block.id
+							} %}
+							{% include '_components/buttons/buttonRound' with {
+								type: 'button',
+								icon: 'arrow-right',
+								style: 'white-outline',
+								class: 'slider-button-next-' ~ block.id
+							} %}
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	{% endblock %}
+{% endembed %}
+
+{# prettier-ignore-start #}
+{% js %}
+   document.addEventListener('alpine:init', () => {
+      Alpine.data('{{ block.type }}', () => ({
+         slider(id) { 
+            const carousel = document.querySelector(`.js-slider-${id}`)
+            const swiper = new Swiper(carousel, {
+                loop: false, 
+                grabCursor: true,
+                autoHeight: false,  
+                centeredSlides: true, 
+                allowTouchMove: true,
+                speed: 750,
+                navigation: {
+                    nextEl: '.slider-button-next-' + id,
+                    prevEl: '.slider-button-prev-' + id,
+                },
+                slidesPerView: 1,
+                spaceBetween: 10,
+                initialSlide: 1,
+                breakpoints: { 
+					768: {
+						slidesPerView: 2,
+                        centeredSlides: false, 
+					},
+                    1024: {
+						slidesPerView: 3,
+                        centeredSlides: false, 
+					},
+					1280: {
+						slidesPerView: 3.5,
+                        centeredSlides: false, 
+					},
+                    1440: {
+						slidesPerView: 4,
+                        centeredSlides: false, 
+					},
+				},
+            })            
+         }
+      }))
+   })
+{% endjs %}
+{# prettier-ignore-end #}

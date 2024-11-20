@@ -1,0 +1,119 @@
+{% set slides = block.sliderImages.all() %}
+{% set slideCount = slides|length %}
+
+{% embed '_components/section'
+    with {
+    paddingY: 'flush',
+    paddingX: 'flush'
+} %}
+    {% block sectionContent %}
+        <div class="flex flex-col items-center py-20 text-sm lg:grid lg:grid-cols-12 lg:gap-x-5 lg:py-20 xl:text-base 2xl:text-md {{ vars.class.siteMargin.x }}">
+                <div class="text-center md:col-span-6 lg:text-left ">
+                    {% if block.heading|length %}
+                        {% include '_components/heading' with {
+                            tag: 'h2',
+                            size: 'font-bold text-4xl sm:text-4xl md:text-5xl lg:text-7xl',
+                            text: block.heading
+                        } %}
+                    {% endif %}
+                    {% if block.plainText|length %}
+                        {% include '_components/richText' with {
+                            tag: 'p',
+                            class: 'text-sm text-white mt-2', 
+                            content: block.plainText
+                        } %}
+                    {% endif %}
+                </div>
+                {% if block.button.url|length %}
+                    <div class="ml-8 md:col-span-6 md:mt-8 lg:flex lg:justify-end">
+                        <div class="flex gap-x-2">
+                                {% include '_components/buttons/buttonBlock' with {
+                                    text: block.button.text,
+                                    type: 'a',
+                                    url: block.button.url,
+                                } %}
+                        </div>
+                    </div>
+                {% endif %}
+     
+        </div>
+        <div class="relative w-screen h-full " style="max-height:700px;">
+    <section x-data="{{ block.type }}" x-init="slider({{ block.id }})">
+        <div class="swiper z-10 js-slider-{{ block.id }}">
+            <div class="swiper-wrapper">
+                {% for image in slides %}
+                    <div class="relative swiper-slide">
+                        <div class="flex flex-wrap rounded-xl transition-all duration-300 
+                                    {% if loop.index0 % 2 == 0 %} mt-10 {% else %} mb-10 {% endif %}" 
+                             style="border-radius:30px; height:500px; width:370px; overflow:hidden;">
+                            {% include '_components/picture' with {
+                                image: image.image.one(),
+                                transform: 'noRatio',
+                                ratio: false,
+                                alt: image.title,
+                                focalPoint: true,
+                                imgClass: 'object-cover h-full w-full'
+                            } %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+
+        
+    {% endblock %}
+{% endembed %}
+
+{% js %}
+document.addEventListener('alpine:init', () => {
+    Alpine.data('{{ block.type }}', () => ({
+        slider(id) {
+            const carousel = document.querySelector(`.js-slider-${id}`)
+            const swiper = new Swiper(carousel, {
+                loop: true, 
+                grabCursor: false,
+                autoHeight: true,  
+                centeredSlides: true, 
+                allowTouchMove: false,
+                slidesPerView: 'auto',
+                spaceBetween: 20,
+                initialSlide: 1,
+                speed: 1500,  // Increased speed for smoother transition
+                autoplay: {
+                    delay: 300,  // Delay between slides
+                    disableOnInteraction: false,
+                },
+                breakpoints: {
+                    320: {
+                        slidesPerView: 0.9,
+                        spaceBetween: 2
+                    },
+                    768: {
+                        slidesPerView: 1.9,
+                        spaceBetween: 2
+                    },
+                    1024: {
+                        slidesPerView: 2.6,
+                        spaceBetween: 3
+                    },
+                    1440: {
+                        slidesPerView: 3.1,
+                        spaceBetween: 20
+                    }
+                },
+                effect: 'coverflow',
+                coverflowEffect: {
+                    rotate: 0,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 2,
+                    slideShadows: true,  // Enable slide shadows for smoother effect
+                },
+                transitionDuration: 1000,  // Customize the transition duration
+            })
+        }
+    }))
+})
+{% endjs %}

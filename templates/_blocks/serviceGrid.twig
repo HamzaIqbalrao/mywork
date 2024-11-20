@@ -1,0 +1,65 @@
+"{% set entries = craft.entries.section('services') %}
+{% set totalEntries = entries | length %}
+
+{% embed '_components/section' with { 
+	paddingY: "topBottom" } %}
+	{% block sectionContent %}
+		<div
+			id="fleet-grid" class="space-y-12">
+			{% for item in entries %}
+			<a href="{{ item.url }}">
+				{# Service Card with border at top and bottom #}
+				<div class="grid md:grid-cols-12 items-center py-4" style="border-top: 1px solid #4b5563; border-bottom: 1px solid #4b5563;">
+					{# Picture in the first 4 columns with rounded corners #}
+					<div class="md:col-span-4">
+						<div class="relative flex-wrap flex overflow-hidden" style="border-radius:30px;">
+							{% include '_components/picture' with {
+                                image: item.image.one(),
+                                transform: '16x9',
+                                ratio: false,
+                                alt: ''
+                            } %}
+						</div>
+					</div>
+
+
+					<div
+						class="flex flex-col md:col-span-8 pl-8">
+						{# Row for Heading and Button #}
+						<div
+							class="flex md:grid md:grid-cols-12 gap-x-4 items-center justify-between">
+							{# Heading on the extreme left (col-span-9) #}
+							<div class="md:col-span-9 pb-4">
+								{% include '_components/heading' with {
+                                    text: item.title,
+                                    tag: 'h2',
+									size: 'text-md font-semibold text-white sm:text-lg md:text-xl lg:text-4xl xl:text-6xl 2xl:text-7xl 3xl:text-8xl',
+                                } %}
+							</div>
+
+							{# Button on the extreme right (col-span-3) #}
+							<div class="md:col-span-3 text-right">
+								{% include '_components/buttons/buttonRound' with {
+                                    style: 'gradient',
+                                    icon: 'arrow-up-right',
+                                    type: 'div',
+                                } %}
+							</div>
+						</div>
+
+						{# Text below, taking 4 out of the 8 columns #}
+						<div class="grid md:grid-cols-12 mt-4">
+							<div class="md:col-span-6">
+								{% include '_components/richText' with {
+                                    content: item.textExcerpt,
+                                    class: 'font-light text-white text-lg sm:text-md md:text-lg lg:text-xl'
+                                } only %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</a>
+			{% endfor %}
+		</div>
+	{% endblock %}
+{% endembed %}"

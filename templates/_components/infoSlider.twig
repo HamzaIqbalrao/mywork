@@ -1,0 +1,76 @@
+{#
+    Info Slider Component
+
+    @type {include}
+    @param {object} slides
+    @param {string} class
+
+    @example
+    {% include '_components/infoSlider' with {
+        slides: block.slider
+    } %}
+
+#}
+
+{# {% set slides = slides ?? [] %}
+{% set slideCount = slides|length %}
+
+<div class="flex w-[300px] items-center bg-gray-600 p-4 md:w-[420px] md:p-5 md:pl-8 xl:w-[550px] xl:p-8 xl:pl-14 {{ class ?? class }}" x-data="{{ block.type }}" x-init="slider({{ block.id }})">
+	<div class="swiper js-slider-{{ block.id }}">
+		<div class="swiper-wrapper">
+			{% for item in slides %}
+				<div class="swiper-slide !h-auto">
+					<div class="flex h-full items-center gap-x-2">
+						<i class="{{ item.icon }} flex-shrink-0 text-base text-green xl:text-lg" aria-hidden="true"></i>
+						<span class="block text-sm/none font-light text-white xl:text-md/none">{{ item.text }}</span>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+	<div class="hidden items-center justify-center gap-1.5 md:flex {{ slideCount < 2 ? 'md:hidden' }}">
+		{% include '_components/buttons/buttonRound' with {
+			type: 'button',
+			icon: 'chevron-left',
+			style: 'white-outline',
+			size: 'small',
+			class: 'slider-button-prev-' ~ block.id
+		} %}
+		{% include '_components/buttons/buttonRound' with {
+			type: 'button',
+			icon: 'chevron-right',
+			style: 'white-outline',
+			size: 'small',
+			class: 'slider-button-next-' ~ block.id
+		} %}
+	</div>
+</div> #}
+
+{# prettier-ignore-start #}
+{# {% js %}
+   document.addEventListener('alpine:init', () => {
+      Alpine.data('{{ block.type }}', () => ({
+         slider(id) { 
+            const carousel = document.querySelector(`.js-slider-${id}`)
+            const swiper = new Swiper(carousel, {
+                loop: true, 
+                grabCursor: true, 
+                allowTouchMove: true,
+                speed: 750,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+                navigation: {
+                    nextEl: '.slider-button-next-' + id,
+                    prevEl: '.slider-button-prev-' + id,
+                },
+                slidesPerView: 1,
+                spaceBetween: 20,
+            })            
+         }
+      }))
+   })
+{% endjs %} #}
+{# prettier-ignore-end #}

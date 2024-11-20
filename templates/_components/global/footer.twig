@@ -1,0 +1,123 @@
+{% set mainLogo = source('_svg/logo_main.svg') %}
+{% set mainLogoDark = source('_svg/logo_main_dark.svg') %}
+
+<footer class="relative">
+    <!-- Main Content Section -->
+    <div class="relative z-20 overflow-hidden">
+        <!-- Image Wrapper -->
+<div class="relative my-4">
+    <!-- Image -->
+    <div class="py-16 px-10 w-full h-full">
+        {% include '_components/picture' with {
+            image: global.footerImage.one(),
+            transform: 'noRatio',
+            ratio: false,
+            focalPoint: true,
+            imgClass: 'object-cover w-full h-full'
+        } %}
+    </div>
+
+    <!-- Heading and Form Overlay -->
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-5 py-10 w-full h-full">
+        <!-- Heading -->
+        <h2 class="pb-10 text-md font-bold text-white md:text-xl lg:text-3xl xl:text-6xl 2xl:text-7xl 3xl:text-8xl leading-tight">
+            {{ global.footerImageHeading|nl2br }}
+        </h2>
+
+        <!-- Form -->
+        <div class="sm:w-4/5 md:w-3/4 lg:w-2/3 xl:w-1/2">
+            {% include '_components/quoteForm' %}
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Footer Section -->
+    <div class="relative {{ vars.class.siteMargin.x }}" style="background-color: black;">
+        <div class="grid gap-x-7 gap-y-16 md:grid-cols-12 lg:pt-20 lg:pb-8">
+            <!-- Footer Left Column: Logo, Message, and Navigation -->
+            <div class="flex flex-col gap-y-5 items-start text-white md:col-span-12 lg:col-span-6">
+                <!-- Logo -->
+                <a 
+                    href="{{ siteUrl }}" 
+                    class="block w-36 h-16 focus:outline-none"
+                    role="button"
+                    aria-label="Main header logo">
+                        {{
+                            svg(mainLogo)|attr({
+                                class: 'fill-current w-full',
+                                'aria-hidden':'true'
+                            })
+                        }}
+                </a>
+                <!-- Subheading -->
+                {% include '_components/eyebrow' with {
+                    text: global.messagingSubheading,
+                    style: 'none',
+                    spacing: ''
+                } %}
+                <!-- Navigation Links -->
+                {% for item in global.footerNavigationColumns.all() %}
+                <div class="flex flex-row gap-y-5 text-white">
+                    <div class="flex flex-row items-start gap-3">
+                        {% for link in item.links.all() %}
+                            <a href="{{ link.button.url }}" class="inline-block text-sm font-normal transition-colors duration-300 hover:text-[#E9550D] focus:text-[#E9550D] focus:outline-none md:text-lg xl:text-xl">
+                                {{ link.button.text }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Footer Right Column: Buttons and Back to Top -->
+            <div class="flex flex-col h-full justify-between gap-y-5 lg:col-span-6 items-end">
+                {% if (global.footerButton1.url|length) or (global.footerButton2.url|length) %}
+                <div class="flex flex-wrap mt-12">
+                    {% if global.footerButton1.url|length %}
+                        {% include '_components/buttons/buttonBlock' with {
+                            text: global.footerButton1.text,
+                            type: 'a',
+                            style: 'gradient',
+                            url: global.footerButton1.url,
+                            rounded: true
+                        } %}
+                    {% endif %}
+                </div>
+                {% endif %}
+                <!-- Back to Top -->
+                <div>
+                    {% include '_components/backToTop' %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Base -->
+        <div class="flex justify-between items-center border-t border-gray-500 py-4 text-sm xl:text-base 2xl:text-md">
+            <!-- Copyright Message -->
+            <div class="text-left">
+                <span class="font-light text-white">
+                    &copy; {{ now|date('Y') }}
+                    {{ global.companyText1|length ? global.companyText1 : siteName }}
+                </span>
+            </div>
+
+            <!-- Social Links -->
+            {% if global.socialLinks|length %}
+            <div class="flex gap-x-4">
+                {% for item in global.socialLinks.all() %}
+                    {% include '_components/buttons/buttonRound' with {
+                        style: 'gradient',
+                        icon: item.button.brandIcon.value,
+                        type: 'a',
+                        url: item.button.url,
+                        size: 'normal',
+                        target: '_blank'
+                    } %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</footer>

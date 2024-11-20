@@ -1,0 +1,137 @@
+{#
+    Button Round Component
+
+    @type {include}
+    @param {string} style
+    @param {string} icon
+    @param {string} type
+    @param {string} url
+    @param {string} class
+    @param {string} attributes
+    @param {integer} tabIndex
+    @param {string} size
+    @param {string} target
+
+    Usage:
+    {% include '_components/buttons/buttonRound' with {
+        style: 'white-outline', 
+        icon: 'arrow-right', 
+        type: 'button', 
+        url: '#', 
+        class: '', 
+    } %}
+#}
+
+{% set icon = icon ?? null %}
+
+{% set styleMap = {
+    'gradient': { 
+        'style': 'bg-orange', 
+        'icon': 'text-white', 
+        'hoverBG': 'group-hover:bg-gradient-to-r from-orange to-[#F8AB00]',  
+    },
+    'orange-outline': { 
+        'style': 'border-orange', 
+        'icon': 'text-white hover:text-white hover:border-[0.5px] focus-visible:text-white group-focus-visible:text-white',
+        'hoverBG': 'group-hover:bg-orange group-focus-visible:bg-orange',
+    },
+    'orange': { 
+        'style': 'border-[0.5px] border-white text-white bg-orange',
+        'icon': 'text-white hover:text-black',
+        'hoverBG': 'group-hover:bg-white',
+    },
+    'orange-disabled': { 
+        'style': 'bg-orange',
+        'icon': 'text-white',
+        'hoverBG': '',
+    },
+    'orange-black': { 
+        'style': 'bg-orangeCustom border-[0.5px] border-orangeCustom hover:border-black group-hover:border-black', 
+        'icon': 'text-black hover:text-white group-hover:text-white',
+        'hoverBG': 'group-hover:bg-black',
+    },
+    'black-outline': { 
+        'style': 'border-[0.5px] border-gray-600 group-hover:border-orangeCustom group-focus-visible:border-orangeCustom', 
+        'icon': 'text-gray-600 hover:text-white group-hover:text-white focus-visible:text-white group-focus-visible:text-white',
+        'hoverBG': 'group-hover:bg-orangeCustom group-focus-visible:bg-orangeCustom',
+    },
+    'white-outline': { 
+        'style': 'border-[0.5px] border-white ', 
+        'icon': 'text-orange',
+        'hoverBG': 'group-hover:bg-gradient-to-r from-orange to-[#F8AB00]', 
+    },
+    'disabled': { 
+        'style': 'border-[0.5px] border-gray-300',
+        'icon': 'text-gray-300',
+        'hoverBG': ''
+    },
+} %}
+
+
+{% set iconMap = {
+    'arrow-right': 'fa-light fa-arrow-right',
+    'arrow-left': 'fa-light fa-arrow-left',
+    'arrow-up': 'fa-light fa-arrow-up',
+    'arrow-down': 'fa-light fa-arrow-down',
+    'arrow-up-right': 'fa-light fa-arrow-up-right',
+    'chevron-up': 'fa-sharp fa-light fa-chevron-up',
+    'chevron-down': 'fa-sharp fa-light fa-chevron-down',
+    'chevron-left': 'fa-sharp fa-light fa-chevron-left',
+    'chevron-right': 'fa-sharp fa-light fa-chevron-right',
+    'minus': 'fa-light fa-minus',
+    'plus': 'fa-light fa-plus',
+    'plane': 'fa-solid fa-paper-plane',
+    'xmark': 'fa-sharp fa-regular fa-xmark',
+    'bars': 'fa-sharp fa-regular fa-bars',
+    'search': 'fa-sharp fa-regular fa-magnifying-glass',
+    'facebook': 'fa-brands fa-facebook',
+    'x-twitter': 'fa-brands fa-x-twitter',
+    'linkedin': 'fa-brands fa-linkedin',
+    'instagram': 'fa-brands fa-instagram',
+} %}
+{% set selectedIcon = icon ? iconMap[icon] : '' %}
+
+{% set baseClass = '
+    group
+    rounded-full 
+    duration-300 
+    outline-none
+    shadow-none
+    overflow-hidden
+    focus:outline-none
+    lg:hover:duration-150
+    lg:group-hover:duration-150
+' %}
+{% set selectedStyle = styleMap[style|default('light-outline')] %}
+{% set type = type|default('button') %}
+{% set class = class|default('') %}
+{% set url = url|default('#') %}
+{% set tabIndex = tabIndex|default(0) %}
+{% set size = size|default('normal') %}
+{% set text = text ?? '' %}
+
+<{{ type }}
+    {{ type == 'a' ? ('href="' ~ url ~ '"')|raw }} 
+    class="{{ baseClass }} {{ selectedStyle.style }} {{ selectedStyle.icon }}
+        {% if size == 'large' %}
+            w-28 h-28 md:w-28 md:h-28 text-5xl
+        {% elseif size == 'normal' %}
+            w-10 h-10 md:w-12 md:h-12 text-lg
+        {% else %}
+            w-7 h-7 text-xs
+        {% endif %}
+        {{ class }}"
+    {{ attributes|default('')|raw }}
+    tabindex="{{ tabIndex }}"
+    target="{{ target|default('_self') }}"
+>
+    <div class="relative w-full h-full flex items-center justify-center">
+        {% if selectedIcon %}
+            <i class="{{ selectedIcon }} relative z-20 {{ size == 'normal' ? 'text-base md:text-lg' : 'text-xs' }}" aria-hidden="true"></i>
+        {% endif %}
+        {% if text %}
+            <span class="relative z-20 block {{ size == 'normal' ? 'text-base md:text-lg' : 'text-xs' }}">{{ text }}</span>
+        {% endif %}
+        <div class="{{ selectedStyle.hoverBG }} absolute duration-300 z-10 inset-0"></div>
+    </div>
+</{{ type }}>

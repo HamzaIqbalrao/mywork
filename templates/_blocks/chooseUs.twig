@@ -1,0 +1,61 @@
+{# Previous layout settings remain the same - remove col-span-8 #}
+{% set wrapperOuterClass = 'grid lg:grid-cols-12 ' ~ vars.class.gap.x %}
+{% set wrapperInnerClass = 'w-full col-span-12' %}  {# Changed to span all 12 columns #}
+{% set textClass = 'md:col-span-4 md:col-start-9' %}
+{% set wrapperTextClass = 'lg:grid-cols-12' %}
+{% set headingClass = 'max-w-screen-lg' %}
+
+{% embed '_components/section' with {
+    paddingY: 'topBottom',
+    paddingX: 'leftRight',
+} %}
+{% block sectionContent %}
+    <div class="{{ wrapperOuterClass }}">
+        <div class="{{ wrapperInnerClass }}">
+            <div class="{{ wrapperTextClass }} flex items-center px-4 md:px-8 lg:px-12"> {# Added padding for content #}
+                {# Left Content Section #}
+                <div style="width: 40%; padding-right: 40px;">
+                    <div class="flex flex-col items-start gap-6 md:gap-8 {{ headingClass }}" style="font-size: 56px; font-weight: 700;">
+                        {% if block.aboutUsText|length %}
+                            {% include '_components/richText' with {
+                                tag: 'p',
+                                class: 'text-sm text-white', 
+                                content: block.aboutUsText
+                            } %}
+                        {% endif %}
+                    </div>
+                </div>
+                {# Right Image Section #}
+                <div style="width: 60%;" class="md:col-span-6 md:items-start lg:col-span-6 lg:items-center xl:col-start-7">
+                    <div 
+                        class="border border-white/20 grid justify-center md:grid-cols-2 lg:grid-cols-3 relative z-10"
+                        style="background: radial-gradient(121.18% 95% at 4.71% 75.52%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%); border-radius: 30px; min-height:300px;"
+                    >
+                        {% for item in block.whychooseUsCards.all() %}
+                            <div class="flex items-center">
+                                {# Card Content #}
+                                <div class="flex h-full w-full flex-col items-center justify-center gap-y-5 px-8 py-6 text-center">
+                                    {% if item.chooseUsNumber|length %}
+                                        {% include '_components/richText' with {
+                                        content: item.chooseUsNumber,
+                                        class: 'text-6xl font-bold text-white',
+                                        style: 'background-color: linear-gradient(90deg, #E9550D 0%, #F8AB00 100%);',
+                                    } %}
+
+                                    {% endif %}
+                                    {% if item.chooseUsText|length %}
+                                        <span class="text-2xl font-semibold leading-none tracking-wide text-white">{{ item.chooseUsText }}</span>
+                                    {% endif %}
+                                </div>
+                                {% if not loop.last %}
+                                    <div class="hidden lg:block" style="font-size: 72px; line-height: 2; font-weight: 80; color: #FFFFFF33;">|</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% endembed %}

@@ -1,0 +1,83 @@
+{#
+    Accordion component
+
+    @type {include}
+    @param {array} rows - required
+#}
+
+<div 
+    x-data="{ visible: '{{ 'row-' ~ rows[0].question|kebab }}' }" 
+    x-cloak>
+    <div class="transform-gpu w-full flex flex-col">
+        {% for row in rows %}
+            {% set rowId = 'row-' ~ row.question|kebab %}
+
+            <div 
+                x-ref="{{ rowId }}"
+                class="transform-gpu w-full transition duration-300 border px-6 lg:px-10 text-white"
+                :class="{ 
+                    'border-t-[rgba(233,85,13,1)] border-x-[rgba(233,85,13,1)] border-b-[rgba(233,85,13,1)]': visible == '{{ rowId }}', 
+                    'border-x-transparent border-t-transparent border-b-gray-300': visible != '{{ rowId }}',
+                 }">
+                
+                <div 
+                    x-on:click.prevent="
+                        previousRowIndex = visible ? {{ loop.index0 }} - 1 : null;
+                        visible = visible != '{{ rowId }}' ? '{{ rowId }}' : false
+                    "
+                    x-on:keydown.enter.prevent="
+                        previousRowIndex = visible ? {{ loop.index0 }} - 1 : null;
+                        visible = visible != '{{ rowId }}' ? '{{ rowId }}' : false
+                    "
+                    x-on:keydown.space.prevent="
+                        previousRowIndex = visible ? {{ loop.index0 }} - 1 : null;
+                        visible = visible != '{{ rowId }}' ? '{{ rowId }}' : false
+                    "
+                    class="transform-gpu group transition group flex gap-x-7 cursor-pointer py-4 lg:py-6 focus:outline-none"
+                    tabindex="0">
+                    
+                    <div class="w-10/12">
+                        <div class="text-lg/6 lg:text-xl/6 x:text-2xl text-white">{{ row.question }}</div>  <!-- Heading color set to white -->
+                    </div>
+                    
+                    <div class="ml-auto flex items-center">
+                        <!-- Plus/Minus button for open/closed state -->
+                        <div x-show="visible == '{{ rowId }}'">
+                            {% include '_components/buttons/buttonRound' with {
+                                style: 'gradient', 
+                                icon: 'minus',  
+                                type: 'button', 
+                                size: 'small', 
+                                attributes: 'x-show="visible == \'' ~ rowId ~ '\'"',
+                                class: 'transform'
+                            } %}
+                        </div>
+                    
+                        <!-- Plus button for closed state -->
+                        <div x-show="visible != '{{ rowId }}'">
+                            {% include '_components/buttons/buttonRound' with {
+                                style: 'gradient', 
+                                icon: 'plus',  
+                                type: 'button', 
+                                size: 'small', 
+                                attributes: 'x-show="visible != \'' ~ rowId ~ '\'"', 
+                            } %}
+                        </div>
+                    </div>                                 
+                </div>
+
+                <div 
+                    x-show="visible == '{{ rowId }}'" 
+                    x-collapse
+                    class="transform-gpu w-full">
+                    <div class="transform-gpu w-full pb-7 pr-16 lg:pb-8">
+                        {% include '_components/richText' with {
+                            content: row.answer,
+                            class: 'font-light text-base' 
+                        } %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

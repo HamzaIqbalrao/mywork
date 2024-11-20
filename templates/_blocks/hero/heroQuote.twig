@@ -1,0 +1,40 @@
+<section aria-label="Hero" class="relative overflow-hidden px-4">
+    <!-- Media Section (Image Fullscreen) -->
+    {% if block.image|length %}
+        <div class="relative w-full h-screen p-4">
+            {% include '_components/picture' with {
+                image: block.image.one(),
+                transform: 'noRatio',
+                ratio: true,
+                focalPoint: true,
+                imgClass: 'object-cover w-full h-full rounded-xl'
+            } %}
+        </div>
+    {% endif %}
+
+    <!-- Content Section Inside the Image -->
+    <div class="absolute inset-0 z-10 flex items-center justify-center">
+        <div class="flex flex-col justify-center items-center gap-y-4 text-center text-white">
+            <!-- Heading -->
+            {% if block.heading|length %}
+                {% include '_components/heading' with {
+                    tag: 'h1',
+                    size: "text-md font-bold text-white md:text-xl lg:text-3xl xl:text-6xl 2xl:text-7xl 3xl:text-8xl",
+                    text: block.heading
+                } %}
+            {% endif %}
+
+            <!-- Subtext -->
+            {% if block.text|length %}
+                <span class="block text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-medium">
+                    {{ block.text }}
+                </span>
+            {% endif %}
+
+            <!-- Form Section -->
+            <div class="mx-auto w-full sm:w-4/5 md:w-3/4 lg:w-2/3 xl:w-1/2">
+                {% include '_components/quoteForm' %}
+            </div>
+        </div>
+    </div>
+</section>

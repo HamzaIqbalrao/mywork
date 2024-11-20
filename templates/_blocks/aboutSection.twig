@@ -1,0 +1,56 @@
+{% set wrapperOuterClass = 'w-full grid lg:grid-cols-12' %}
+{% set wrapperInnerClass = 'col-span-12 w-full' %}
+{% set headingClass = 'max-w-full text-left' %}
+
+{% embed '_components/section' with {
+    paddingY: 'topBottom',
+    paddingX: 'leftRight'
+} %}
+    {% block sectionContent %}
+        <div class="{{ wrapperOuterClass }}">
+            <div class="{{ wrapperInnerClass }}">
+
+                {# Heading Section #}
+                <div class="{{ headingClass }}" style="font-size: 56px; font-weight: 700; margin-bottom: 2rem;">
+                    {% if block.heading|length %}
+                        {% include '_components/heading' with {
+                            tag: 'h2',
+                            size: '5xl',
+                            text: block.heading
+                        } %}
+                    {% endif %}
+                </div>
+
+                {# Description Sections in a Single Row with 50/50 Width #}
+                <div class="flex w-full gap-6 md:gap-8">
+
+                    {# Left Description Section #}
+                    <div class="w-1/2"> 
+                            {% if block.richTextFull|length %}
+                                {% include '_components/richText' with {
+                                    tag: 'p',
+                                    class: 'text-sm text-white', 
+                                    content: block.richTextFull
+                                } %}
+                            {% endif %}
+                    </div>
+
+                    {# Right Description/Image Section #}
+                    <div class="w-1/2">
+                        <div class="flex flex-wrap">
+                            {% if block.richTextFull2|length %}
+                                {% include '_components/richText' with {
+                                    tag: 'p',
+                                    class: 'text-sm text-white', 
+                                    content: block.richTextFull2
+                                } %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    {% endblock %}
+{% endembed %}

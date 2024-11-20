@@ -1,0 +1,87 @@
+{# Categories #}
+{% if category is defined %}
+	{% set entry = craft.entries.section('page').type('pageCaseStudiesExterior').one() %}
+{% endif %}
+
+{% set categories = craft.categories.group('caseStudy').all() %}
+
+{# Entries + Pagination #}
+{% set entriesParams = {
+	section: 'caseStudies',
+	limit: 2,
+	relatedTo: category is defined ? category : null,
+	orderBy: 'caseStudyDate desc'
+} %}
+
+{% set entries = craft.entries(entriesParams) %}
+{% paginate entries as pageInfo, pageEntries %}
+
+{% extends '_layouts/global' %}
+
+{% block site %}
+	{# Hero #}
+	{% include '_components/heroImage' with {
+		heading: entry.heading,
+		button: {
+			text: entry.button.text,
+			url: entry.button.url
+		}
+	} %}
+
+	{% embed '_components/section'
+		with {
+			paddingY: 'flush'
+		}
+	%}
+		{% block sectionContent %}
+			{# Filters #}
+			<div id="entries-grid" class="flex flex-wrap gap-2 pb-10 pt-14 md:justify-center lg:pb-16 lg:pt-[90px] xl:pt-32">
+				{# Case Studies Exterior #}
+				{% set isIndex = (craft.app.request.segments|length) == 1 and (craft.app.request.segments|first) == 'case-studies' %}
+				{% include '_components/buttons/buttonBlock' with {
+					type: isIndex ? 'div' : 'a',
+					text: 'All',
+					style: isIndex ? 'green-disabled' : 'green-outline-light',
+					url: isIndex ? null : '/case-studies#entries-grid'
+				} %}
+
+				{# Categories #}
+				{% for category in categories %}
+					{% set relatedEntries = craft.entries().section('caseStudies').relatedTo(category).all() %}
+
+					{% if relatedEntries|length %}
+						{% set isActive = craft.app.request.pathInfo == category.uri %}
+
+						{% include '_components/buttons/buttonBlock' with {
+							type: isActive ? 'div' : 'a',
+							text: category.title,
+							style: isActive ? 'green-disabled' : 'green-outline-light',
+							url: category.url ~ '#entries-grid'
+						} %}
+					{% endif %}
+				{% endfor %}
+			</div>
+
+			{# Entries #}
+			<div class="flex flex-col {{ vars.class.gap.y }}">
+				{% for item in pageEntries %}
+					<div class="md:col-span-6 lg:col-span-4">
+						{% include '_components/cards/case-study' with {
+							content: item
+						} %}
+					</div>
+				{% endfor %}
+			</div>
+
+			{# Pagination #}
+			{% if pageInfo.totalPages > 1 %}
+				<div class="py-16">
+					{% include '_components/pagination' with {
+						pageInfo: pageInfo,
+						scrollTarget: '#entries-grid'
+					} %}
+				</div>
+			{% endif %}
+		{% endblock %}
+	{% endembed %}
+{% endblock %}

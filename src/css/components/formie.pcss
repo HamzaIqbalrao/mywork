@@ -1,0 +1,57 @@
+:root {
+    /* Base form class */
+    .fui-form {
+        @apply w-full;
+    }
+
+    /* Input fields - for dark theme */
+    .fui-custom-dark .fui-input[type='text'],
+    .fui-custom-dark .fui-input[type='email'],
+    .fui-custom-dark .fui-input[type='number'],
+    .fui-custom-dark .fui-input[type='tel'],
+    .fui-custom-dark .fui-select,
+    .fui-custom-dark .fui-type-multi-line-text .fui-input {
+        @apply block w-full appearance-none rounded-none border-2 border-white 
+               bg-transparent px-4 py-3 text-base leading-tight text-white 
+               outline-none transition-colors focus:border-blue-500 
+               focus:shadow-none focus:outline-none;
+    }
+
+    /* Field wrapper */
+    .fui-custom-dark .fui-field {
+        @apply relative mb-6;
+    }
+
+    /* Labels */
+    .fui-custom-dark .fui-label {
+        @apply block text-sm font-medium text-white mb-2;
+    }
+
+    /* Button wrapper */
+    .fui-custom-dark .fui-btn-wrapper {
+        @apply pt-10;
+    }
+
+    /* Checkbox styling */
+    .fui-custom-dark .fui-checkbox label:before {
+        @apply border-white;
+    }
+
+    .fui-custom-dark .fui-checkbox-label {
+        @apply text-gray-300;
+    }
+
+    .fui-custom-dark .fui-checkbox-label a {
+        @apply text-white underline;
+    }
+
+    /* Select dropdown */
+    .fui-select:not([multiple]):not([size]) {
+        @apply pr-14;
+    }
+
+    /* Multi-line text areas */
+    .fui-type-multi-line-text .fui-input {
+        @apply h-32 resize-none;
+    }
+}

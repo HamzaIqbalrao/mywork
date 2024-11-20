@@ -1,0 +1,38 @@
+{#
+    Paragraph Component
+
+    @type {include}
+    @param {string} text - required
+    @param {string} tag
+    @param {string} size
+    @param {string} class
+
+    @example
+    {% include '_components/paragraph' with {
+        text: 'Paragraph text here',
+        tag: 'p',
+        size: 'base',
+        class: 'text-white'
+    } %}
+#}
+
+{% set paragraphSizes = {
+    'xs': 'text-xs',
+    'sm': 'text-sm',
+    'base': 'text-base tracking-wide',
+    'md': 'text-md',
+    'lg': 'text-lg',
+    'xl': 'text-xl',
+    '2xl': 'text-2xl'
+} %}
+
+{# Set default tag and size #}
+{% set tag = tag ?? 'p' %}
+{% set size = size ?? 'base' %}
+
+<{{ tag }}
+    style="font-family: 'Figtree'; font-size: 18px; font-weight: 500; line-height: 27px; class="text-white"
+    class="{{ paragraphSizes[size] }} {{ class ?? '' }}"
+>
+    {{ text|replace({'<p>': '', '</p>': ''})|nl2br|raw }}
+</{{ tag }}>

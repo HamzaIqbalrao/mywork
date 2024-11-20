@@ -1,0 +1,73 @@
+{#
+	Fleet Card Component
+
+	@type {include}
+    @param {object} content
+
+	@example
+    {% include '_components/cards/fleet' with {
+        content: item
+    } %}
+#}
+
+{% set image = content.image.one() %}
+{% set heading = content.title %}
+{% set text = content.textExcerpt %}
+{% set url = content.url %}
+{% set tag = content.blogTag|length ? content.blogTag.one().title : null %}
+{% set date = content.postDate|date('F j, Y') %}
+{% set read = read ?? '' %}
+
+<a href="{{ item.url }}" class="group relative block focus-visible:outline-none">
+	<div class="relative">
+		{# {% if tag|length %}
+			<div class="absolute left-5 top-5 z-30 rounded-full border-[0.5px] border-white px-3 py-1 text-xs font-light text-white">
+				{{ tag }}
+			</div>
+		{% endif %} #}
+
+		{# Info #}
+		<div class="absolute inset-x-5 bottom-5 z-30 flex flex-wrap items-center gap-5 text-white">
+			<div class="flex items-center gap-x-2 text-xs">
+				<i class="fa-sharp fa-light fa-clock"></i>
+				<span class="inline-block font-light">{{ read }} Read</span>
+			</div>
+			<div class="flex items-center gap-x-2 text-xs">
+				<i class="fa-sharp fa-light fa-calendar-day"></i>
+				<span class="inline-block font-light">{{ date }}</span>
+			</div>
+		</div>
+
+		{# Image + Overlay #}
+		<div class="absolute inset-x-0 bottom-0 z-20 h-1/2 bg-gradient-to-t from-black to-transparent transition-opacity duration-500 group-hover:opacity-50 group-focus-visible:opacity-50"></div>
+		<div class="aspect-h-8 aspect-w-12 relative z-10 w-full overflow-hidden">
+			{% include '_components/picture' with {
+				image: image,
+				transform: '4x3',
+				ratio: false,
+				focalPoint: false,
+				alt: '',
+				imgClass: 'object-cover w-full h-full transition-transform duration-500 group-hover:scale-[1.03] group-focus-visible:scale-[1.03]'
+			} %}
+		</div>
+	</div>
+
+	{# Text #}
+	{% include '_components/heading' with {
+		text: item.title,
+		tag: 'div',
+		size: '2xl',
+		class: 'py-4 md:py-5 md:pr-3 lg:text-xl xl:text-2xl'
+	} %}
+	{% include '_components/richText' with {
+		content: text,
+		class: 'font-light max-w-[700px] md:pr-3'
+	} only %}
+
+	<div class="flex cursor-pointer items-center gap-2 pt-5 text-black lg:pt-8 xl:text-base">
+		<span class="block text-sm/none font-light tracking-wide text-current underline transition-colors duration-300 group-hover:text-green group-focus-visible:text-green">Continue Reading</span>
+		<div class="flex h-6 w-6 items-center justify-center rounded-full border-[0.5px] border-current text-xs transition-colors duration-300 group-hover:bg-green group-hover:text-white group-focus-visible:bg-green group-focus-visible:text-white">
+			<i class="fa-sharp fa-light fa-arrow-up-right"></i>
+		</div>
+	</div>
+</a>

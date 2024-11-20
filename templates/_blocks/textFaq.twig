@@ -1,0 +1,56 @@
+{# Use Global or Block FAQ #}
+{% set faqEntries = block.faqEntries|length ? block.faqEntries : global.faqEntries %}
+{% set faqText = block.faqText ? block.faqText : global.faqText %}
+{% set faqProfileImage = block.faqProfileImage|length ? block.faqProfileImage.one() : global.faqProfileImage.one() %}
+{% set faqProfileName = block.faqProfileName ? block.faqProfileName : global.faqProfileName %}
+{% set faqProfileTitle = block.faqProfileTitle ? block.faqProfileTitle : global.faqProfileTitle %}
+
+{% embed '_components/section'
+	with {
+		paddingY: "topBottom",
+		bgColor: 'black;'
+	}
+%}
+	{% block sectionContent %}
+		<div class="relative grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 {{ vars.class.gap.x }}">
+			{# Heading + Text #}
+			<div class="px-10 justify-center flex flex-col gap-6 md:gap-8 md:col-span-6 2xl:col-span-5">
+				{% if block.heading|length %}
+					{% include '_components/heading' with {
+						tag: 'h2',
+						size: 'font-bold text-4xl sm:text-4xl md:text-5xl lg:text-7xl',
+						text: block.heading,
+						class: 'text-white'
+					} %}
+				{% endif %}
+				{% if block.plainText|length %}
+					{% include '_components/richText' with {
+						tag: 'p',
+						class: 'text-sm text-white', 
+						content: block.plainText
+					} %}
+				{% endif %}
+				<div class="flex flex-col md:flex-row items-center gap-6 mt-8">
+					{# CTA Button #}
+					{% if block.button.url|length %}
+						{% include '_components/buttons/buttonBlock' with {
+							text: block.button.text,
+							type: 'a',
+							url: block.button.url,
+							style: 'gradient',
+							class: 'mb-4 md:mb-0'
+						} %}
+					{% endif %}
+				</div>
+			</div>
+			{# FAQ #}
+			<div class="md:col-span-6 2xl:col-span-7">
+				{% if faqEntries|length %}
+					{% include '_components/faqAccordion' with {
+						rows: faqEntries
+					} only %}
+				{% endif %}
+			</div>
+		</div>
+	{% endblock %}
+{% endembed %}

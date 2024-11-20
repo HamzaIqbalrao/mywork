@@ -1,0 +1,105 @@
+{#
+    CTA Faces Component
+    @type {include}
+    @param {string} style
+    @param {bool} centered
+    @param {string} theme
+#}
+
+{% set style = style|default('regular') %}
+{% set centered = centered ?? true %}
+{% set theme = theme ?? 'light' %}
+{% set text = text ?? global.ctaFacesText %}
+{% set button = button ?? global.ctaFacesButton %}
+{% set images = images ?? global.ctaFacesImages %}
+
+{% switch style %}
+{% case 'regular' %}
+    {% set imageClass = '-ml-3 h-12 w-12' %}
+    {% set textClass = 'text-base' %}
+    {% set wrapClass = 'pl-3' %}
+    {% set containerClass = 'py-3 px-5' %}
+{% case 'small' %}
+    {% set imageClass = '-ml-2 h-6 w-6' %}
+    {% set textClass = 'text-sm' %}
+    {% set wrapClass = 'pl-2' %}
+    {% set containerClass = 'py-2 px-4' %}
+{% endswitch %}
+
+{% switch theme %}
+{% case 'light' %}
+    {% set ctaTextClass = 'text-white' %}
+    {% set glassClass = 'bg-white/10' %}
+{% case 'dark' %}
+    {% set ctaTextClass = 'text-white' %}
+    {% set glassClass = 'bg-black/35' %}
+
+{% endswitch %}
+<div class="{{ class ?? '' }} rounded-[60px]" style="
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-radius: 60px;
+">
+    <div 
+        class="flex items-center gap-5 rounded-[60px] {{ containerClass }} border border-white/50 group"
+        style="
+            background: rgba(255, 255, 255, 0.25); {# Changed to white background with opacity #}
+            backdrop-filter: blur(12px); {# Increased blur for better effect #}
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        "
+        onmouseover="this.style.background='rgba(255, 255, 255, 0.35)'" {# Lighter hover state #}
+        onmouseout="this.style.background='rgba(255, 255, 255, 0.25)'"
+    >
+        {# Rest of the code remains the same #}
+        {# Faces Stack #}
+        <div class="inline-flex {{ wrapClass }}">
+            {% for image in images.all() %}
+                <div class="
+                    relative 
+                    z-[{{ loop.index }}] 
+                    overflow-hidden 
+                    rounded-full 
+                    {{ imageClass }}"
+                    style="border: 2px solid #FF6B00;"
+                >
+                    {% include '_components/picture' with {
+                        image: image,
+                        transform: '1x1',
+                        ratio: false,
+                        focalPoint: true,
+                        lazy: false
+                    } %}
+                </div>
+            {% endfor %}
+        </div>
+
+        {# Text Content #}
+        <div class="flex flex-col gap-1">
+            <span class="
+                text-white {# Changed text color to black for better contrast #}
+                {{ textClass }}
+                leading-[1.2]
+                font-normal
+            ">
+                {{ text }}
+            </span>
+            
+            <a 
+                href="{{ button.url }}" 
+                class="
+                    {{ textClass }}
+                    leading-[1.2]
+                    font-medium
+                    transition-colors
+                    duration-300
+                "
+                style="color: #FF6B00;"
+                onmouseover="this.style.color='#FF8533'"
+                onmouseout="this.style.color='#FF6B00'"
+            >
+                {{ button.text }}
+            </a>
+        </div>
+    </div>
+</div>

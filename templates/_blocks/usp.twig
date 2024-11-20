@@ -1,0 +1,61 @@
+{% embed '_components/section'
+  with {
+    paddingY: block.padding.value
+  }
+%}
+  {% block sectionContent %}
+    <div class="relative border border-white py-12 md:py-16 lg:py-30" style="background: radial-gradient(121.18% 95% at 4.71% 75.52%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%); paddingX: 30px; paddingY:50px; border-radius: 30px;">
+      <div class="{{ vars.class.siteMargin.x }}">
+        {# Content Container #}
+        <div class="relative">
+          {# Heading #}
+          {% if block.heading|length %}
+            <div class="flex flex-col gap-5 text-center text-white md:col-span-12 lg:col-span-12 pb-12">
+              {% include '_components/heading' with {
+                tag: 'h3',
+                size: 'font-bold text-4xl sm:text-4xl md:text-5xl lg:text-7xl',
+                text: block.heading,
+                class: 'sm'
+              } %}
+            </div>
+          {% endif %}
+
+          {# Icons + Text with Pipes #}
+          <div class="relative">
+            {# Cards Grid #}
+            <div class="grid justify-center md:grid-cols-2 lg:grid-cols-3 relative z-10">
+              {% for item in block.uspCards.all() %}
+                <div class="flex items-center">
+                  {# Card Content #}
+                  <div class="flex h-full w-full max-w-[460px] flex-col items-center gap-y-5 px-5 py-4 text-center">
+                    {% if item.icon|length %}
+                      <div class="flex h-16 w-16 items-center justify-center rounded-full text-2xl text-white" style="background: linear-gradient(90deg, #E9550D 0%, #F8AB00 100%);">
+                        <i class="{{ item.icon }} fill-current" aria-hidden="true"></i>
+                      </div>
+                    {% endif %}
+                    
+                    {% if item.heading|length %}
+                      <span class="text-xl font-semibold leading-none tracking-wide text-white mb-3">{{ item.heading }}</span>
+                    {% endif %}
+                    
+                    {% if item.text|length %}
+                      {% include '_components/richText' with {
+                        content: item.text,
+                        class: 'text-sm font-light text-gray-300'
+                      } %}
+                    {% endif %}
+                  </div>
+
+                  {# Add pipe separator except for last item in row #}
+                  {% if not loop.last and loop.index % 3 != 0 %}
+                    <div class="hidden lg:block px-2" style="font-size: 48px; line-height: 1; font-weight: 100; color: #FFFFFF33;">|</div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+{% endembed %}
